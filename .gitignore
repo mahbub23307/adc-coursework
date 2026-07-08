@@ -1,0 +1,6 @@
+cmake-build-debug/
+.idea/workspace.xml
+.idea/tasks.xml
+*.exe
+*.obj
+*.log
