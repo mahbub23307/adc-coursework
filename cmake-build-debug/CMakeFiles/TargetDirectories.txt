@@ -1,0 +1,3 @@
+C:/Users/m43-hasan/CLionProjects/adc-coursework/cmake-build-debug/CMakeFiles/adc_coursework.dir
+C:/Users/m43-hasan/CLionProjects/adc-coursework/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/m43-hasan/CLionProjects/adc-coursework/cmake-build-debug/CMakeFiles/rebuild_cache.dir
