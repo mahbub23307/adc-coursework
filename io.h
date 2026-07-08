@@ -6,5 +6,6 @@
 #include "adc.h"
 
 int readHeader(const char *filename, FileHeader *header);
+int readFirstSample(const char *filename, ADCSampleBinary *sample);
 
 #endif
