@@ -49,4 +49,30 @@ int readFirstSample(const char *filename, ADCSampleBinary *sample)
 
     fclose(file);
     return 1;
+}int readAllSamples(const char *filename, ADCSampleBinary samples[], uint32_t count)
+{
+    FILE *file = fopen(filename, "rb");
+
+    if (file == NULL)
+    {
+        return 0;
+    }
+
+    FileHeader header;
+
+    if (fread(&header, sizeof(FileHeader), 1, file) != 1)
+    {
+        fclose(file);
+        return 0;
+    }
+
+    if (fread(samples, sizeof(ADCSampleBinary), count, file) != count)
+    {
+        fclose(file);
+        return 0;
+    }
+
+    fclose(file);
+
+    return 1;
 }

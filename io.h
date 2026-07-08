@@ -7,5 +7,8 @@
 
 int readHeader(const char *filename, FileHeader *header);
 int readFirstSample(const char *filename, ADCSampleBinary *sample);
-
+int readAllSamples(const char *filename, ADCSampleBinary samples[], uint32_t count);
+int readAllSamples(const char *filename,
+                   ADCSampleBinary samples[],
+                   uint32_t count);
 #endif
