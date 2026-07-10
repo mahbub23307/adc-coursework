@@ -1,7 +1,25 @@
-//
-// Created by m43-hasan on 08/07/2026.
-//
-#ifndef STATS_H
-#define STATS_H
+#include "stats.h"
 
-#endif
+void convertSamples(ADCSampleBinary *binarySamples,
+                    ADCSample *samples,
+                    uint32_t count)
+{
+    ADCSampleBinary *src = binarySamples;
+    ADCSample *dst = samples;
+
+    for (uint32_t i = 0; i < count; i++)
+    {
+        dst->timestamp = src->timestamp;
+        dst->channel_id = src->channel_id;
+        dst->raw_value = src->raw_value;
+        dst->temperature = src->temperature;
+        dst->status_flags = src->status_flags;
+        dst->sequence_number = src->sequence_number;
+
+        /* Voltage will be calculated in Requirement 5 */
+        dst->voltage = 0.0f;
+
+        src++;
+        dst++;
+    }
+}
