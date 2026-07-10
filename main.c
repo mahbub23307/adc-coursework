@@ -70,6 +70,13 @@ IntegrityStats integrity;
     checkSamplingIntegrity(samples,
                            header.record_count,
                            &integrity);
+
+
+    exportResults("results.txt",
+                  stats,
+                  &integrity);
+
+
     /* Read and display the first sample */
     ADCSampleBinary sample;
 

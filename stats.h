@@ -31,5 +31,7 @@ void calculateStatistics(ADCSample *samples,
 void checkSamplingIntegrity(ADCSample *samples,
                             uint32_t count,
                             IntegrityStats *integrity);
-
+void exportResults(const char *filename,
+                   ChannelStats stats[],
+                   IntegrityStats *integrity);
 #endif

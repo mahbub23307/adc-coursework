@@ -1,6 +1,6 @@
+#include <stdio.h>
 #include <math.h>
 #include "stats.h"
-
 void convertSamples(ADCSampleBinary *binarySamples,
                     ADCSample *samples,
                     uint32_t count)
@@ -145,4 +145,49 @@ void checkSamplingIntegrity(ADCSample *samples,
             integrity->outOfOrderCount++;
         }
     }
+}
+void exportResults(const char *filename,
+                   ChannelStats stats[],
+                   IntegrityStats *integrity)
+{
+    FILE *file = fopen(filename, "w");
+
+    if (file == NULL)
+    {
+        printf("Error: Cannot create results.txt\n");
+        return;
+    }
+
+
+    fprintf(file, "Channel Statistics\n");
+    fprintf(file, "==================\n\n");
+
+    for (int i = 0; i < 4; i++)
+    {
+        fprintf(file, "Channel %d\n", i);
+        fprintf(file, "Mean Voltage : %.3f V\n", stats[i].mean);
+        fprintf(file, "Minimum : %.3f V\n", stats[i].minimum);
+        fprintf(file, "Maximum : %.3f V\n", stats[i].maximum);
+        fprintf(file, "Standard Deviation : %.3f V\n",
+                stats[i].standardDeviation);
+
+        fprintf(file, "Over Voltage Faults : %u\n",
+                stats[i].overVoltageCount);
+
+        fprintf(file, "Under Voltage Faults : %u\n",
+                stats[i].underVoltageCount);
+
+        fprintf(file, "Sensor Faults : %u\n\n",
+                stats[i].sensorFaultCount);
+    }
+    fprintf(file, "Sampling Integrity\n");
+    fprintf(file, "==================\n");
+
+    fprintf(file, "Missing Records : %u\n",
+            integrity->missingCount);
+
+    fprintf(file, "Out-of-Order Records : %u\n",
+            integrity->outOfOrderCount);
+
+    fclose(file);
 }
