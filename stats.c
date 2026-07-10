@@ -40,6 +40,10 @@ void calculateStatistics(ADCSample *samples,
     {
         stats[i].minimum = 3.3f;
         stats[i].maximum = 0.0f;
+
+        stats[i].overVoltageCount = 0;
+        stats[i].underVoltageCount = 0;
+        stats[i].sensorFaultCount = 0;
     }
 
     /* First pass: sum, min, max */
@@ -57,7 +61,18 @@ void calculateStatistics(ADCSample *samples,
         {
             stats[sample->channel_id].maximum = sample->voltage;
         }
-
+        if (sample->voltage > 3.0f)
+        {
+            stats[sample->channel_id].overVoltageCount++;
+        }
+        if (sample->voltage < 0.3f)
+        {
+            stats[sample->channel_id].underVoltageCount++;
+        }
+        if (sample->status_flags & 0x01)
+        {
+            stats[sample->channel_id].sensorFaultCount++;
+        }
         sample++;
     }
 

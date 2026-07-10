@@ -93,6 +93,14 @@ int main()
         printf("Maximum : %.3f V\n", stats[i].maximum);
         printf("Standard Deviation : %.3f V\n",
                stats[i].standardDeviation);
+        printf("Over Voltage Faults : %u\n",
+               stats[i].overVoltageCount);
+
+        printf("Under Voltage Faults : %u\n",
+               stats[i].underVoltageCount);
+
+        printf("Sensor Faults : %u\n",
+               stats[i].sensorFaultCount);
     }
     /* Free allocated memory */
     free(binarySamples);

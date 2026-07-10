@@ -14,6 +14,11 @@ typedef struct
     float minimum;
     float maximum;
     float standardDeviation;
+
+    uint32_t overVoltageCount;
+    uint32_t underVoltageCount;
+    uint32_t sensorFaultCount;
+
 } ChannelStats;
 void calculateStatistics(ADCSample *samples,
                          uint32_t count,
