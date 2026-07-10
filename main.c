@@ -63,10 +63,13 @@ int main()
     printf("Successfully read %u samples.\n",
            header.record_count);
     ChannelStats stats[4];
-
+IntegrityStats integrity;
     calculateStatistics(samples,
                         header.record_count,
                         stats);
+    checkSamplingIntegrity(samples,
+                           header.record_count,
+                           &integrity);
     /* Read and display the first sample */
     ADCSampleBinary sample;
 
@@ -102,6 +105,10 @@ int main()
         printf("Sensor Faults : %u\n",
                stats[i].sensorFaultCount);
     }
+    printf("\nSampling Integrity\n");
+    printf("------------------\n");
+    printf("Missing Records : %u\n", integrity.missingCount);
+    printf("Out-of-Order Records : %u\n", integrity.outOfOrderCount);
     /* Free allocated memory */
     free(binarySamples);
     free(samples);

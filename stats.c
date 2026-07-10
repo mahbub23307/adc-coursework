@@ -115,3 +115,34 @@ void calculateStatistics(ADCSample *samples,
         }
     }
 }
+void checkSamplingIntegrity(ADCSample *samples,
+                            uint32_t count,
+                            IntegrityStats *integrity)
+{
+    integrity->missingCount = 0;
+    integrity->outOfOrderCount = 0;
+
+    if (count == 0)
+    {
+        return;
+    }
+
+    for (uint32_t i = 1; i < count; i++)
+    {
+        uint32_t previous = samples[i - 1].sequence_number;
+        uint32_t current = samples[i].sequence_number;
+
+        if (current == previous + 1)
+        {
+            /* Correct sequence */
+        }
+        else if (current > previous + 1)
+        {
+            integrity->missingCount += current - previous - 1;
+        }
+        else
+        {
+            integrity->outOfOrderCount++;
+        }
+    }
+}

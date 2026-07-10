@@ -20,8 +20,16 @@ typedef struct
     uint32_t sensorFaultCount;
 
 } ChannelStats;
+typedef struct
+{
+    uint32_t missingCount;
+    uint32_t outOfOrderCount;
+} IntegrityStats;
 void calculateStatistics(ADCSample *samples,
                          uint32_t count,
                          ChannelStats stats[]);
+void checkSamplingIntegrity(ADCSample *samples,
+                            uint32_t count,
+                            IntegrityStats *integrity);
 
 #endif
