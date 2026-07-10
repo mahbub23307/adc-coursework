@@ -8,5 +8,15 @@
 void convertSamples(ADCSampleBinary *binarySamples,
                     ADCSample *samples,
                     uint32_t count);
+typedef struct
+{
+    float mean;
+    float minimum;
+    float maximum;
+    float standardDeviation;
+} ChannelStats;
+void calculateStatistics(ADCSample *samples,
+                         uint32_t count,
+                         ChannelStats stats[]);
 
 #endif

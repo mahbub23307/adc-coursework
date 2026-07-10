@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "io.h"
+#include "stats.h"
 
 int main()
 {
@@ -61,7 +62,11 @@ int main()
 
     printf("Successfully read %u samples.\n",
            header.record_count);
+    ChannelStats stats[4];
 
+    calculateStatistics(samples,
+                        header.record_count,
+                        stats);
     /* Read and display the first sample */
     ADCSampleBinary sample;
 
@@ -77,7 +82,18 @@ int main()
         printf("Status : %u\n", sample.status_flags);
         printf("Sequence : %u\n", sample.sequence_number);
     }
+    printf("\nChannel Statistics\n");
+    printf("------------------\n");
 
+    for (int i = 0; i < 4; i++)
+    {
+        printf("\nChannel %d\n", i);
+        printf("Mean Voltage : %.3f V\n", stats[i].mean);
+        printf("Minimum : %.3f V\n", stats[i].minimum);
+        printf("Maximum : %.3f V\n", stats[i].maximum);
+        printf("Standard Deviation : %.3f V\n",
+               stats[i].standardDeviation);
+    }
     /* Free allocated memory */
     free(binarySamples);
     free(samples);

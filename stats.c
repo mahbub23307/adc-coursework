@@ -1,3 +1,4 @@
+#include <math.h>
 #include "stats.h"
 
 void convertSamples(ADCSampleBinary *binarySamples,
@@ -16,10 +17,86 @@ void convertSamples(ADCSampleBinary *binarySamples,
         dst->status_flags = src->status_flags;
         dst->sequence_number = src->sequence_number;
 
-        /* Voltage will be calculated in Requirement 5 */
+        /* Voltage calculated in Requirement 5 */
         dst->voltage = (src->raw_value / 4095.0f) * 3.3f;
 
         src++;
         dst++;
+    }
+}
+
+void calculateStatistics(ADCSample *samples,
+                         uint32_t count,
+                         ChannelStats stats[])
+{
+    ADCSample *sample = samples;
+
+    float sum[4] = {0};
+    uint32_t sampleCount[4] = {0};
+    float varianceSum[4] = {0};
+
+    /* Initialise minimum and maximum */
+    for (uint32_t i = 0; i < 4; i++)
+    {
+        stats[i].minimum = 3.3f;
+        stats[i].maximum = 0.0f;
+    }
+
+    /* First pass: sum, min, max */
+    for (uint32_t i = 0; i < count; i++)
+    {
+        sum[sample->channel_id] += sample->voltage;
+        sampleCount[sample->channel_id]++;
+
+        if (sample->voltage < stats[sample->channel_id].minimum)
+        {
+            stats[sample->channel_id].minimum = sample->voltage;
+        }
+
+        if (sample->voltage > stats[sample->channel_id].maximum)
+        {
+            stats[sample->channel_id].maximum = sample->voltage;
+        }
+
+        sample++;
+    }
+
+    /* Calculate mean */
+    for (uint32_t i = 0; i < 4; i++)
+    {
+        if (sampleCount[i] > 0)
+        {
+            stats[i].mean = sum[i] / sampleCount[i];
+        }
+        else
+        {
+            stats[i].mean = 0.0f;
+        }
+    }
+
+    /* Second pass: variance */
+    sample = samples;
+
+    for (uint32_t i = 0; i < count; i++)
+    {
+        float difference = sample->voltage - stats[sample->channel_id].mean;
+
+        varianceSum[sample->channel_id] += difference * difference;
+
+        sample++;
+    }
+
+    /* Calculate standard deviation */
+    for (uint32_t i = 0; i < 4; i++)
+    {
+        if (sampleCount[i] > 0)
+        {
+            stats[i].standardDeviation =
+                    sqrt(varianceSum[i] / sampleCount[i]);
+        }
+        else
+        {
+            stats[i].standardDeviation = 0.0f;
+        }
     }
 }
