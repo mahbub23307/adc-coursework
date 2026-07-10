@@ -56,6 +56,9 @@ int main()
         return 1;
     }
 
+/* Convert binary samples to ADCSample */
+    convertSamples(binarySamples, samples, header.record_count);
+
     printf("Successfully read %u samples.\n",
            header.record_count);
 
@@ -69,6 +72,7 @@ int main()
         printf("Timestamp : %.3f\n", sample.timestamp);
         printf("Channel : %u\n", sample.channel_id);
         printf("Raw Value : %u\n", sample.raw_value);
+        printf("Voltage : %.3f V\n", samples[0].voltage);
         printf("Temp : %d\n", sample.temperature);
         printf("Status : %u\n", sample.status_flags);
         printf("Sequence : %u\n", sample.sequence_number);

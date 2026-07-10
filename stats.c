@@ -17,7 +17,7 @@ void convertSamples(ADCSampleBinary *binarySamples,
         dst->sequence_number = src->sequence_number;
 
         /* Voltage will be calculated in Requirement 5 */
-        dst->voltage = 0.0f;
+        dst->voltage = (src->raw_value / 4095.0f) * 3.3f;
 
         src++;
         dst++;
